@@ -1,7 +1,7 @@
 #Members: 
 #	Pablo Avalos
 #	Alexis Muñoz
-#Description: Design a recursive program in assembler language that can solve the Hanoi towers problem.
+#Description: Design a recursive program in assembly language that can solve the Hanoi towers problem.
 .data
 .text
 main:
@@ -14,13 +14,15 @@ main:
 	ori $s3, $s3, 64	#initialize address for third tower
 	add $t0, $zero, $s0	#initialize temp counter i = n
 	add $t1, $zero, $zero	#intialize temp to break cycle
+	add $t2, $zero, $s1	#pointer to first tower
 loop_fill_stack:
 	beq $t0, $t1, end_loop_fill_stack
-	sw $t0, 0($s1)
-	addi $s1, $s1, 4
+	sw $t0, 0($t2)
+	addi $t2, $t2, 4
 	addi $t0, $t0, -1
 	j loop_fill_stack
 end_loop_fill_stack:
+	addi $s1,  $s1, -4
 	#Store the function arguments 
 	addi $sp, $sp, -20	#move stack pointer to save function arguments
 	sw $s0, 0($sp)		#store n
@@ -41,11 +43,10 @@ towerOfHanoi:
 	sw $ra, 16($sp)		#store the return address
 	addi $t0, $zero, 1
 	bne $a0, $t0, endTowerOfHanoi	#if n = 1
-	addi $a1, $a1, -4
 	lw $t0, 0($a1)
 	sw $t0, 0($a3)			#origin to destiny
 	sw $zero, 0($a1)		#clear origin
-	addi $a3, $a3, 4
+	addi $a1, $a1, -4		#update origin tower pointer
 	lw $ra, 16($sp)
 	addi $sp, $sp, 20
 	jr $ra
@@ -62,7 +63,16 @@ endTowerOfHanoi:
 	sw $a2, 8($sp)		#store destination
 	sw $a3, 12($sp)		#store auxiliary
 	jal towerOfHanoi
-
+	#Move n from origin to destiny
+	lw $a0, 0($sp)		#n
+	lw $a1, 4($sp)		#origin
+	lw $a2, 8($sp)		#destination
+	lw $a3, 12($sp)		#auxiliary
+	sw $a0, 0($a3)		#move n from origin to destiny
+	addi $a1, $a1, -4
+	sw $zero, 0($a1)	#clear origin
+	addi $a3, $a3, 4
+	#return the stack to previous environment
 
 	
 exit:
