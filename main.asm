@@ -5,7 +5,7 @@
 .data
 .text
 main:
-	addi $s0, $zero, 8	#s0 initialize the number of towers
+	addi $s0, $zero, 8	#s0 initialize the number of towers in the hanoi game
 	ori $s1, $zero, 4097	#add the address 1001
 	sll $s1, $s1, 16	#shift to get the first address of memory
 	add $s2, $zero, $s1
