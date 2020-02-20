@@ -5,7 +5,7 @@
 .data
 .text
 main:
-	addi $s0, $zero, 9	#s0 initialize the number of towers
+	addi $s0, $zero, 8	#s0 initialize the number of towers
 	ori $s1, $zero, 4097	#add the address 1001
 	sll $s1, $s1, 16	#shift to get the first address of memory
 	add $s2, $zero, $s1
@@ -82,7 +82,7 @@ Recursiveness_2:
 	sw $a2, 8($sp)		#store destination
 	sw $a1, 12($sp)		#store origin as auxiliary
 	#We don't store the current address because we need to over write the function environment where it was called
-	jal towerOfHanoi
+	jal towerOfHanoi	#call towerOfHanoi function
 	lw $ra, 16($sp)		#store return address
 	addi $sp, $sp, 20	#go back to previous app status
 	jr $ra
